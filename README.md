@@ -75,7 +75,7 @@ plugins: [ApolloServerPluginLandingPageLocalDefault()],
 
 **[주의]**
 
-- 리졸버 GET 함수가 겹치는게 있어선 안된다.
+- 리졸버 함수가 겹치는게 있어선 안된다.
 - findAllProduct(), findOneProduct() 같이 유니크 한 명칭을 권장한다.
 
 ## database-module-add
