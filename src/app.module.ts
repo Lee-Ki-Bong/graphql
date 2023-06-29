@@ -6,7 +6,8 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
 import { LoggerPlugin } from './common/logger/logger.plugin';
-import { loggerMiddleware } from './common/logger/logger.middleware';
+import { loggerFieldMiddleware } from './common/logger/logger-field.middleware';
+import { ComplexityPlugin } from './common/complexity/complexity.plugin';
 
 @Module({
   imports: [
@@ -17,12 +18,12 @@ import { loggerMiddleware } from './common/logger/logger.middleware';
       autoSchemaFile: 'src/common/graphql/schema.gql',
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
       buildSchemaOptions: {
-        fieldMiddleware: [loggerMiddleware],
+        fieldMiddleware: [loggerFieldMiddleware],
       },
     }),
     DatabaseModule,
     ProductModule,
   ],
-  providers: [LoggerPlugin],
+  providers: [ComplexityPlugin, LoggerPlugin],
 })
 export class AppModule {}

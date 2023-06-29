@@ -1,10 +1,10 @@
 import { InputType, Field } from '@nestjs/graphql';
 
 @InputType()
-export class CreateProductInput {
+export class CreateProductOptionInput {
   @Field()
-  p_name: string;
+  po_name: string;
 
   @Field()
-  p_price: number;
+  po_value: string;
 }

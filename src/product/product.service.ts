@@ -1,37 +1,70 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { plainToInstance } from 'class-transformer';
-import { Repository } from 'typeorm';
-import { CreateProductInput } from './dto/create-product.input';
-import { UpdateProductInput } from './dto/update-product.input';
-import { Product } from './entities/product.entity';
+import { EntityManager, Repository } from 'typeorm';
+import { CreateProductInput } from './dto/input/create/create-product.input-type';
+import { UpdateProductInput } from './dto/input/update/update-product.input-type';
+import { ProductObject } from './dto/response/product.object-type';
+
+import { ProductEntity } from './entities/product.entity';
 
 @Injectable()
 export class ProductService {
   constructor(
-    @InjectRepository(Product) private readonly prdRepo: Repository<Product>,
+    @InjectEntityManager() private readonly entityManager: EntityManager,
+    @InjectRepository(ProductEntity)
+    private readonly prdRepo: Repository<ProductEntity>,
   ) {}
 
   async create(createProductInput: CreateProductInput) {
-    const product = plainToInstance(Product, createProductInput);
+    const product = plainToInstance(ProductEntity, createProductInput);
     const rewProduct = await this.prdRepo.save(product);
-    return rewProduct;
+    return plainToInstance(ProductObject, rewProduct);
   }
 
   async findAll() {
-    const productList = await this.prdRepo.find();
-    return productList;
+    const productList = await this.prdRepo.find({
+      relations: {
+        p_product_detail: true,
+        p_product_options: true,
+        p_product_tags: true,
+      },
+    });
+    return plainToInstance(ProductObject, productList);
   }
 
   async findOne(id: number) {
-    const product = await this.prdRepo.findOneBy({ p_id: id });
-    return product;
+    const product = await this.prdRepo.findOne({
+      where: { p_id: id },
+      relations: {
+        p_product_detail: true,
+        p_product_options: true,
+        p_product_tags: true,
+      },
+    });
+    return plainToInstance(ProductObject, product);
   }
 
-  async update(id: number, updateProductInput: UpdateProductInput) {
-    const product = plainToInstance(Product, updateProductInput);
-    const rewProduct = await this.prdRepo.update(id, product);
-    return rewProduct;
+  async update(updateProductInput: UpdateProductInput) {
+    const rewProduct = await this.entityManager.transaction(
+      async (entityManager) => {
+        const updateProduct = plainToInstance(
+          ProductEntity,
+          updateProductInput,
+        );
+        await entityManager.save(updateProduct);
+        const newProduct = await entityManager.findOne(ProductEntity, {
+          where: { p_id: updateProduct.p_id },
+          relations: {
+            p_product_detail: true,
+            p_product_options: true,
+            p_product_tags: true,
+          },
+        });
+        return newProduct;
+      },
+    );
+    return plainToInstance(ProductObject, rewProduct);
   }
 
   async remove(id: number) {

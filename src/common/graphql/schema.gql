@@ -2,30 +2,79 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Product {
+type ProductOptionObject {
+  po_id: ID!
+  po_name: String!
+  po_value: String!
+}
+
+type ProductTagObject {
+  pt_id: ID!
+  pt_name: String!
+}
+
+type ProductDetailObject {
+  pd_id: ID!
+  pd_description: String!
+}
+
+type ProductObject {
   p_id: ID!
   p_name: String!
   p_price: Float!
+  p_product_detail: ProductDetailObject
+  p_product_options: [ProductOptionObject]!
+  p_product_tags: [ProductTagObject]!
 }
 
 type Query {
-  findAllProduct: [Product!]!
-  findOneProduct(id: Int!): Product!
+  findAllProduct: [ProductObject!]!
+  findOneProduct(id: Int!): ProductObject!
 }
 
 type Mutation {
-  createProduct(createProductInput: CreateProductInput!): Product!
-  updateProduct(updateProductInput: UpdateProductInput!): Product!
+  createProduct(createProductInput: CreateProductInput!): ProductObject!
+  updateProduct(updateProductInput: UpdateProductInput!): ProductObject!
   removeProduct(id: Int!): Boolean!
 }
 
 input CreateProductInput {
   p_name: String!
   p_price: Float!
+  p_product_detail: CreateProductDetailInput
+  p_product_options: [CreateProductDetailInput]!
+  p_product_tags: [CreateProductTagInput]!
+}
+
+input CreateProductDetailInput {
+  pd_description: String!
+}
+
+input CreateProductTagInput {
+  pt_name: String!
 }
 
 input UpdateProductInput {
+  p_id: Int!
   p_name: String
   p_price: Float
-  id: Int!
+  p_product_detail: UpdateProductDetailInput
+  p_product_options: [UpdateProductOptionInput]
+  p_product_tags: [UpdateProductTagInput]
+}
+
+input UpdateProductDetailInput {
+  pd_id: Int
+  pd_description: String
+}
+
+input UpdateProductOptionInput {
+  po_id: Int
+  po_name: String
+  po_value: String
+}
+
+input UpdateProductTagInput {
+  pt_id: Int
+  pt_name: String
 }

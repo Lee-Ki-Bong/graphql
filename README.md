@@ -128,6 +128,89 @@ npm install class-validator class-transformer
   - 함수들 await, async 추가
 - src/product/product.resolver.ts : 함수들 async 키워드 추가
 
+##
+
+## [주의] 관계에 대해서 시작하기전에 typeorm 사전 지식이 있어야함.
+
+[typeorm-tutorial](https://github.com/mysohodevelop/typeorm-tutorial)
+
+##
+
+## @Field() FieldOptions 맴버중 nullable 에 줄 수 있는 옵션
+
+- true: 선택적으로 처리
+- false: 필수로 처리
+- 'items': 필드가 배열 형태일 때, 배열자체는 필수 & 배열 아이템들 선택적
+- 'itemsAndList': 필드가 배열 형태일 때, 배열 자체를 선택적 & 배열 아이템들 선택적
+
+##
+
+## 1:1 관계
+
+src/product/entities/product-detail.entity.ts
+src/product/dto/input/create/create-product-detail.input-type.ts
+src/product/dto/input/update/update-product-detail.input-type.ts
+src/product/dto/response/product-detail.object-type.ts
+
+##
+
+## 1:N 관계
+
+src/product/entities/product-option.entity.ts
+src/product/dto/input/create/create-product-option.input-type.ts
+src/product/dto/input/update/update-product-option.input-type.ts
+src/product/dto/response/product-option.object-type.ts
+
+##
+
+## N:M 관계
+
+src/product/entities/product-tag.entity.ts
+src/product/dto/input/create/create-product-tag.input-type.ts
+src/product/dto/input/update/update-product-tag.input-type.ts
+src/product/dto/response/product-tag.object-type.ts
+
+##
+
+## 로거 필드 미들웨어
+
+src/common/logger/logger-field.middleware.ts
+
+##
+
 ## 로거 플러그인
 
-## 로거 미들웨어
+src/common/logger/logger.plugin.ts
+
+##
+
+## 쿼리 복잡성 제한 두기
+
+- 패키지 설치
+
+```shell
+npm install apollo-server-plugin-base
+```
+
+```shell
+yarn add apollo-server-plugin-base
+```
+
+```shell
+npm install graphql-query-complexity
+```
+
+```shell
+yarn add graphql-query-complexity
+```
+
+- 쿼리 요청 제한 플러그인 작성
+  src/common/complexity/complexity.plugin.ts
+
+- src/app.module.ts providers: [ComplexityPlugin] 추가
+
+##
+
+## 쿼리 복잡성 제한 두기위한 복잡성 테스트
+
+##
