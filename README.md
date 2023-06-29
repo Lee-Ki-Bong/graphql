@@ -147,28 +147,28 @@ npm install class-validator class-transformer
 
 ## 1:1 관계
 
-src/product/entities/product-detail.entity.ts
-src/product/dto/input/create/create-product-detail.input-type.ts
-src/product/dto/input/update/update-product-detail.input-type.ts
-src/product/dto/response/product-detail.object-type.ts
+- src/product/entities/product-detail.entity.ts
+- src/product/dto/input/create/create-product-detail.input-type.ts
+- src/product/dto/input/update/update-product-detail.input-type.ts
+- src/product/dto/response/product-detail.object-type.ts
 
 ##
 
 ## 1:N 관계
 
-src/product/entities/product-option.entity.ts
-src/product/dto/input/create/create-product-option.input-type.ts
-src/product/dto/input/update/update-product-option.input-type.ts
-src/product/dto/response/product-option.object-type.ts
+- src/product/entities/product-option.entity.ts
+- src/product/dto/input/create/create-product-option.input-type.ts
+- src/product/dto/input/update/update-product-option.input-type.ts
+- src/product/dto/response/product-option.object-type.ts
 
 ##
 
 ## N:M 관계
 
-src/product/entities/product-tag.entity.ts
-src/product/dto/input/create/create-product-tag.input-type.ts
-src/product/dto/input/update/update-product-tag.input-type.ts
-src/product/dto/response/product-tag.object-type.ts
+- src/product/entities/product-tag.entity.ts
+- src/product/dto/input/create/create-product-tag.input-type.ts
+- src/product/dto/input/update/update-product-tag.input-type.ts
+- src/product/dto/response/product-tag.object-type.ts
 
 ##
 
