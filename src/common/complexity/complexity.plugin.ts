@@ -10,6 +10,8 @@ import {
   getComplexity,
   simpleEstimator,
 } from 'graphql-query-complexity';
+import { Logger } from '@nestjs/common';
+import { setComplexityField } from './use-complexity.functions';
 
 @Plugin()
 export class ComplexityPlugin implements ApolloServerPlugin {
@@ -17,10 +19,13 @@ export class ComplexityPlugin implements ApolloServerPlugin {
 
   async requestDidStart(): Promise<GraphQLRequestListener> {
     // 1. 복잡성 제한 값 설정 (요청 개수 제한)
-    const maxComplexity = 3;
+    const maxComplexity = 200;
 
     // 2. GraphQL 스키마 정보 가져오기
     const { schema } = this.gqlSchemaHost;
+
+    // 3. 특정 필드 복잡도 주기.
+    setComplexityField(schema, 'ProductObject', 'p_product_options', 3);
 
     return {
       async didResolveOperation({ request, document }) {
@@ -32,10 +37,6 @@ export class ComplexityPlugin implements ApolloServerPlugin {
           variables: request.variables,
           estimators: [
             // 4. 필드 확장을 고려한 복잡성 추정기
-            /**
-             @complexity(2) // 필드의 복잡성 값을 2로 지정 -> 데코레이터로 설정된 복잡성 값을 읽고 이를 복잡성 계산에 반영
-             public fieldName: string;
-             */
             fieldExtensionsEstimator(),
             // 5. 단순 추정기 : 모든 필드의 복잡성 값은 1로 간주
             simpleEstimator({ defaultComplexity: 1 }),
@@ -48,7 +49,7 @@ export class ComplexityPlugin implements ApolloServerPlugin {
             `Query is too complex: ${complexity}. Maximum allowed complexity: ${maxComplexity}`,
           );
         }
-        console.log('Query Complexity:', complexity);
+        Logger.debug(complexity, 'Query Complexity');
       },
     };
   }

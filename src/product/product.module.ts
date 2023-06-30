@@ -6,7 +6,9 @@ import { ProductEntity } from './entities/product.entity';
 import { ProductDetailEntity } from './entities/product-detail.entity';
 import { ProductOptionEntity } from './entities/product-option.entity';
 import { ProductTagEntity } from './entities/product-tag.entity';
+import { Debug } from 'src/debug/debug.decorator';
 
+@Debug({ context: ProductModule.name, exclude: [ProductService] })
 @Module({
   imports: [
     TypeOrmModule.forFeature([

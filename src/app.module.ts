@@ -5,9 +5,10 @@ import { ProductModule } from './product/product.module';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
-import { LoggerPlugin } from './common/logger/logger.plugin';
-import { loggerFieldMiddleware } from './common/logger/logger-field.middleware';
+import { LoggerPlugin } from './common/graphql-loggers/logger.plugin';
+import { loggerFieldMiddleware } from './common/graphql-loggers/logger-field.middleware';
 import { ComplexityPlugin } from './common/complexity/complexity.plugin';
+import { DebugModule } from './debug/debug.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ComplexityPlugin } from './common/complexity/complexity.plugin';
         fieldMiddleware: [loggerFieldMiddleware],
       },
     }),
+    DebugModule.forRoot({}),
     DatabaseModule,
     ProductModule,
   ],

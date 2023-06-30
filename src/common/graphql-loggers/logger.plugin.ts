@@ -21,25 +21,23 @@ export class LoggerPlugin implements ApolloServerPlugin {
       didResolveOperation: async (
         reqContext: GraphQLRequestContextDidResolveOperation<any>,
       ) => {
-        Logger.log(reqContext.queryHash, '요청 쿼리 해시'); // 쿼리 추척 | 캐싱 | 쿼리 식별
-        Logger.log(`\n` + reqContext.source, '요청 쿼리');
-        Logger.debug(
-          `GraphQL 요청된 쿼리 or 뮤테이션 작업을 해결함.`,
-          reqContext.operationName,
-          // http://localhost:3000/graphql 을 띄우고 있을경우 [IntrospectionQuery] 요청이 반복적으로 온다. 주기적으로 스키마를 읽어가기 때문.
-        );
+        Logger.log(reqContext.operationName, `연산 유형`);
+        Logger.log(reqContext.queryHash, '요청 연산 해시'); // 쿼리 추척 | 캐싱 | 쿼리 식별
+        Logger.log(`\n` + reqContext.source.trim(), '요청 쿼리');
+        // http://localhost:3000/graphql 을 띄우고 있을경우 [IntrospectionQuery] 요청이 반복적으로 온다. 주기적으로 스키마를 읽어가기 때문.
       },
       willSendResponse: async (
         resContext: GraphQLRequestContextWillSendResponse<any>,
       ) => {
-        Logger.debug(`GraphQL 응답을 보낼 것임.`, LoggerPlugin.name);
+        Logger.log(`GraphQL 응답을 보내기 직전.`, LoggerPlugin.name);
         this.loggingResponseData(resContext.response.body);
       },
       didEncounterErrors: async (
-        errors: GraphQLRequestContextDidEncounterErrors<any>,
+        errorContext: GraphQLRequestContextDidEncounterErrors<any>,
       ) => {
-        Logger.error('GraphQL 오류 발생');
-        console.log(errors);
+        errorContext.errors.map((err) => {
+          Logger.error(`${this.extractErrorMessage(err)}`);
+        });
       },
     };
   }
@@ -57,5 +55,22 @@ export class LoggerPlugin implements ApolloServerPlugin {
         Logger.error('알수없는 응답형태입니다.', LoggerPlugin.name);
         break;
     }
+  }
+
+  private extractErrorMessage(err: any): string {
+    if (err.response) {
+      if (err.response.data && err.response.data.message) {
+        return err.response.data.message;
+      } else if (err.response.message) {
+        return err.response.message;
+      }
+    } else if (err.graphQLErrors && err.graphQLErrors.length > 0) {
+      return err.graphQLErrors[0].message;
+    }
+    if (err.message) {
+      return err.message;
+    }
+    Logger.error(`미확인 ERROR...`, LoggerPlugin.name);
+    return '알 수 없는 에러가 발생하였습니다.';
   }
 }
