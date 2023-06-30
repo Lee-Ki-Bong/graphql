@@ -64,7 +64,7 @@ export class ProductModule {}
 
 ## 디버깅 출력 예시
 
-- ProductResolver.findOneProduct() 에 1 args 가 들어왔으며, 처리 시간은 +21.52ms 임을 보여줍니다.
+- ProductResolver.findOneProduct() 에 **1** 이 넘어왔으며, 처리 시간은 +21.52ms 임을 보여줍니다.
 
 ```bash
 [Nest] 2494  - 06/30/2023, 6:15:15 AM   DEBUG [ProductResolver] findOneProduct([
@@ -72,7 +72,7 @@ export class ProductModule {}
 ]) +21.52ms
 ```
 
-- ProductResolver.updateProduct() 에 다음과 같은 InputType 이 들어왔으며, 처리시간은 +41.70ms 임을 보여줍니다.
+- ProductResolver.updateProduct() 에 다음과 같은 InputType 이 넘어왔으며, 처리시간은 +41.70ms 임을 보여줍니다.
 
 ```bash
 [Nest] 2494  - 06/30/2023, 6:16:39 AM   DEBUG [ProductResolver] updateProduct([
