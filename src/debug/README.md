@@ -77,29 +77,8 @@ export class ProductModule {}
 ```bash
 [Nest] 2494  - 06/30/2023, 6:16:39 AM   DEBUG [ProductResolver] updateProduct([
   {
-    "p_id": 3,
-    "p_name": "상품1",
-    "p_price": 10000,
-    "p_product_detail": {
-      "pd_description": "상품설명2"
-    },
-    "p_product_options": [
-      {
-        "po_id": 1,
-        "po_name": "옵션이름1",
-        "po_value": "옵션값1"
-      },
-      {
-        "po_id": 3,
-        "po_name": "옵션이름2",
-        "po_value": "옵션값2"
-      }
-    ],
-    "p_product_tags": [
-      {
-        "pt_name": "태그up2"
-      }
-    ]
+    "p_id": 1,
+    "p_name": "변경할 상품명"
   }
 ]) +41.70ms
 ```
